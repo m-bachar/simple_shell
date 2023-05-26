@@ -10,9 +10,9 @@
 int hsh(info_t *info, char **av)
 {
 	ssize_t r = 0;
-	int builtin_ret = 0;
+	int ret = 0;
 
-	while (r != -1 && builtin_ret != -2)
+	while (r != -1 && ret != -2)
 	{
 		clear_info(info);
 		if (interactive(info))
@@ -22,8 +22,8 @@ int hsh(info_t *info, char **av)
 		if (r != -1)
 		{
 			set_info(info, av);
-			builtin_ret = find_builtin(info);
-			if (builtin_ret == -1)
+			ret = find_builtin(info);
+			if (ret == -1)
 				find_cmd(info);
 		}
 		else if (interactive(info))
@@ -34,13 +34,13 @@ int hsh(info_t *info, char **av)
 	free_info(info, 1);
 	if (!interactive(info) && info->status)
 		exit(info->status);
-	if (builtin_ret == -2)
+	if (ret == -2)
 	{
 		if (info->err_num == -1)
 			exit(info->status);
 		exit(info->err_num);
 	}
-	return (builtin_ret);
+	return (ret);
 }
 
 /**
@@ -54,7 +54,7 @@ int hsh(info_t *info, char **av)
  */
 int find_builtin(info_t *info)
 {
-	int i, built_in_ret = -1;
+	int i, ret = -1;
 	builtin_table builtintbl[] = {
 		{"exit", ft_exit},
 		{"env", ft_env},
@@ -71,10 +71,10 @@ int find_builtin(info_t *info)
 		if (_strcmp(info->argv[0], builtintbl[i].type) == 0)
 		{
 			info->line_count++;
-			built_in_ret = builtintbl[i].func(info);
+			ret = builtintbl[i].func(info);
 			break;
 		}
-	return (built_in_ret);
+	return (ret);
 }
 
 /**
@@ -127,16 +127,16 @@ void find_cmd(info_t *info)
  */
 void fork_cmd(info_t *info)
 {
-	pid_t child_pid;
+	pid_t child_p;
 
-	child_pid = fork();
-	if (child_pid == -1)
+	child_p = fork();
+	if (child_p == -1)
 	{
 		/* TODO: PUT ERROR FUNCTION */
 		perror("Error:");
 		return;
 	}
-	if (child_pid == 0)
+	if (child_p == 0)
 	{
 		if (execve(info->path, info->argv, get_environ(info)) == -1)
 		{

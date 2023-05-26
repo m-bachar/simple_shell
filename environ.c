@@ -82,11 +82,11 @@ int ft_unsetenv(info_t *info)
  */
 int populate_env_list(info_t *info)
 {
-	list_t *node = NULL;
+	list_t *part = NULL;
 	size_t i;
 
 	for (i = 0; environ[i]; i++)
-		add_node_end(&node, environ[i], 0);
-	info->env = node;
+		add_node_end(&part, environ[i], 0);
+	info->env = part;
 	return (0);
 }

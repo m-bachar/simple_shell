@@ -9,7 +9,7 @@
  */
 int main(int ac, char **av)
 {
-	info_t info[] = { INFO_INIT };
+	info_t ex[] = { INFO_INIT };
 	int fd = 2;
 
 	if (ac == 2)
@@ -30,10 +30,10 @@ int main(int ac, char **av)
 			}
 			return (EXIT_FAILURE);
 		}
-		info->readfd = fd;
+		ex->readfd = fd;
 	}
-	populate_env_list(info);
-	read_history(info);
-	hsh(info, av);
+	populate_env_list(ex);
+	read_history(ex);
+	hsh(ex, av);
 	return (EXIT_SUCCESS);
 }
